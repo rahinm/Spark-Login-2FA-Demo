@@ -1,0 +1,31 @@
+#parse("/velocity/layout.vm")
+#@mainLayout()
+<form id="otpForm" method="post">
+    #if($authenticationFailed)
+        <p class="bad notification">$msg.get("OTP_AUTH_FAILED")</p>
+    #elseif($authenticationSucceeded)
+        <p class="good notification">$msg.get("OTP_AUTH_SUCCEEDED", $currentUser)</p>
+    #end
+    <h1>$msg.get("OTP_HEADING")</h1>
+    #if($currentUser)
+ 		<h2>User: $currentUser </h2>
+	#end 	
+    #if($loginRedirect)
+	 	<h2>LoginRedirect: $loginRedirect </h2>
+	#end
+    #if($qrCode)
+	    <p>$msg.get("OTP_INSTRUCTIONS", $WebPath.getINDEX())</p>
+    	<img src="$qrCode" alt="QRCode">
+    	<br>
+    #end
+    <label>$msg.get("OTP_LABEL_OTPCODE")</label>
+    <input type="text" name="otpcode" placeholder="$msg.get("OTP_LABEL_OTPCODE")" value="" required>
+    #if($currentUser)
+        <input type="hidden" name="username" value="$currentUser">
+	#end 	
+    #if($loginRedirect)
+        <input type="hidden" name="loginRedirect" value="$loginRedirect">
+    #end
+    <input type="submit" value="$msg.get("OTP_BUTTON_SUBMIT")">
+</form>
+#end
